@@ -13,8 +13,8 @@ from app.core.config import get_settings  # noqa: E402
 from app.db.base import Base  # noqa: E402
 
 # Import every module's models here as they're built, so their tables are
-# picked up by autogenerate. Phase 1 has none yet.
-# from app.modules.auth.models import *  # noqa
+# picked up by autogenerate.
+from app.modules.trusted_sources import models as trusted_sources_models  # noqa: E402, F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -26,8 +26,14 @@ class Settings(BaseSettings):
     jwt_access_ttl_minutes: int = 15
     jwt_refresh_ttl_days: int = 30
 
-    # AI provider (concrete provider selected in Phase 2)
+    # AI provider (concrete provider selected in Phase 2 — ADR-007)
     ai_provider_api_key: str = ""
+    ai_model_name: str = "claude-sonnet-4-6"
+
+    # Embedding provider (ADR-008)
+    embedding_provider_api_key: str = ""
+    embedding_model_name: str = "embed-multilingual-v3.0"
+    embedding_dimensions: int = 1024
 
     # Rate limiting (tuned in a later phase)
     rate_limit_per_minute: int = 60
