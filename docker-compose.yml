@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: thabat
       POSTGRES_DB: thabat
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - thabat_pgdata:/var/lib/postgresql/data
 

@@ -14,6 +14,7 @@ from app.db.base import Base  # noqa: E402
 
 # Import every module's models here as they're built, so their tables are
 # picked up by autogenerate.
+from app.modules.auth import models as auth_models  # noqa: E402, F401
 from app.modules.trusted_sources import models as trusted_sources_models  # noqa: E402, F401
 
 # this is the Alembic Config object, which provides
