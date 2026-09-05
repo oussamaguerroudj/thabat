@@ -44,12 +44,23 @@ async def _seed_source_with_chunks(db: AsyncSession, vectors_and_texts: list[tup
     return source, document
 
 
+async def _delete_seeded(db: AsyncSession, source: TrustedSource, document: SourceDocument) -> None:
+    """Test data is committed (not just flushed) so the retriever can see it
+    in a fresh connection — that means the fixture's rollback-on-teardown
+    does nothing. Clean up explicitly so runs don't accumulate stale rows
+    that pollute later similarity-search results."""
+    await db.execute(SourceChunk.__table__.delete().where(SourceChunk.document_id == document.id))
+    await db.execute(SourceDocument.__table__.delete().where(SourceDocument.id == document.id))
+    await db.execute(TrustedSource.__table__.delete().where(TrustedSource.id == source.id))
+    await db.commit()
+
+
 async def test_pgvector_retriever_returns_closest_chunk_first(db_session: AsyncSession):
     dim = get_settings().embedding_dimensions
     close_vector = [1.0] + [0.0] * (dim - 1)
     far_vector = [0.0] * (dim - 1) + [1.0]
 
-    await _seed_source_with_chunks(
+    source, document = await _seed_source_with_chunks(
         db_session,
         [
             (close_vector, "هذا النص هو الأقرب دلالياً للاستعلام"),
@@ -57,11 +68,14 @@ async def test_pgvector_retriever_returns_closest_chunk_first(db_session: AsyncS
         ],
     )
 
-    retriever = PgVectorRetriever(db_session)
-    query_embedding = [1.0] + [0.0] * (dim - 1)  # identical to close_vector
-    results = await retriever.retrieve(query_embedding, top_k=2)
+    try:
+        retriever = PgVectorRetriever(db_session)
+        query_embedding = [1.0] + [0.0] * (dim - 1)  # identical to close_vector
+        results = await retriever.retrieve(query_embedding, top_k=2)
 
-    assert len(results) == 2
-    assert results[0].content == "هذا النص هو الأقرب دلالياً للاستعلام"
-    assert results[0].similarity_score > results[1].similarity_score
-    assert results[0].similarity_score > 0.99  # near-identical vectors -> near-1.0 similarity
+        assert len(results) == 2
+        assert results[0].content == "هذا النص هو الأقرب دلالياً للاستعلام"
+        assert results[0].similarity_score > results[1].similarity_score
+        assert results[0].similarity_score > 0.99  # near-identical vectors -> near-1.0 similarity
+    finally:
+        await _delete_seeded(db_session, source, document)

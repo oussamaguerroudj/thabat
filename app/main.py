@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from app.api.auth import router as auth_router
 from app.api.health import router as health_router
 from app.core.config import get_settings
 from app.core.errors import register_exception_handlers
@@ -20,9 +21,9 @@ app = FastAPI(
 register_exception_handlers(app)
 
 app.include_router(health_router)
+app.include_router(auth_router)
 
 # Future module routers are included here as they're built:
-#   app.include_router(auth_router)        -> Phase 3
 #   app.include_router(verification_router) -> Phase 8
 #   app.include_router(ai_router)           -> Phase 9
 #   ...etc, one line per module, per the repo structure in docs/ARCHITECTURE.md
