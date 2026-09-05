@@ -1,0 +1,59 @@
+name: thabat
+description: "THABAT (ثبات) — تحقق قبل أن تنشر"
+publish_to: "none"
+version: 0.1.0+1
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # State management (ADR-011): Riverpod — chosen for testability
+  # (providers are plain Dart, no BuildContext coupling for business logic)
+  # and because router redirect logic needs to read auth state outside the
+  # widget tree, which flutter_riverpod supports directly.
+  flutter_riverpod: ^2.5.1
+
+  # Routing (ADR-011): go_router — Flutter's officially recommended
+  # declarative router, with built-in redirect support used for the
+  # auth guard (see core/router).
+  go_router: ^14.2.0
+
+  # Networking (ADR-011): Dio — chosen over the bare `http` package
+  # specifically for its interceptor chain, used for the auth
+  # interceptor (attach access token, refresh-and-retry on 401).
+  dio: ^5.5.0
+
+  # Secure token storage — Keychain on iOS, Keystore-backed EncryptedSharedPreferences
+  # on Android. Per project rule: tokens are never stored in plain SharedPreferences.
+  flutter_secure_storage: ^9.2.2
+
+  # Connectivity awareness, for the offline-state requirement.
+  connectivity_plus: ^6.0.5
+
+  # Typography: Cairo + Aref Ruqaa (matching the Phase 4 prototype) via
+  # the google_fonts package rather than bundled .ttf files for now — see
+  # ADR-011 for the tradeoff and the migration path to bundled fonts.
+  google_fonts: ^6.2.1
+
+  # Splash video playback (Phase 4's real splash-animation.mp4 asset).
+  video_player: ^2.9.1
+
+  equatable: ^2.0.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/onboarding_hero.png
+    - assets/images/verify_reference.png
+    - assets/video/splash_animation.mp4
