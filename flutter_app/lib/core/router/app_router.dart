@@ -6,6 +6,13 @@ import '../providers/auth_session_controller.dart';
 import '../providers/core_providers.dart';
 import '../widgets/coming_soon_screen.dart';
 import 'app_routes.dart';
+import '../../features/auth/presentation/account_created_screen.dart';
+import '../../features/auth/presentation/forgot_password_screen.dart';
+import '../../features/auth/presentation/login_screen.dart';
+import '../../features/auth/presentation/register_screen.dart';
+import '../../features/auth/presentation/reset_password_screen.dart';
+import '../../features/auth/presentation/verify_code_screen.dart';
+import '../../features/home/presentation/home_placeholder_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/splash/splash_screen.dart';
 
@@ -40,8 +47,31 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: AppRoutes.splash, builder: (_, __) => const SplashScreen()),
       GoRoute(path: AppRoutes.onboarding, builder: (_, __) => const OnboardingScreen()),
 
-      // Everything below is a placeholder until its feature phase builds
-      // the real screen — see AppRoutes' phase-numbered comments.
+      // Phase 6 — Auth, wired to the real Phase 3 backend.
+      GoRoute(path: AppRoutes.login, builder: (_, __) => const LoginScreen()),
+      GoRoute(path: AppRoutes.register, builder: (_, __) => const RegisterScreen()),
+      GoRoute(
+        path: AppRoutes.verifyCode,
+        builder: (_, state) => VerifyCodeScreen(
+          email: state.uri.queryParameters['email'] ?? '',
+        ),
+      ),
+      GoRoute(path: AppRoutes.forgotPassword, builder: (_, __) => const ForgotPasswordScreen()),
+      GoRoute(
+        path: AppRoutes.resetPassword,
+        builder: (_, state) => ResetPasswordScreen(
+          email: state.uri.queryParameters['email'] ?? '',
+        ),
+      ),
+      GoRoute(path: AppRoutes.accountCreated, builder: (_, __) => const AccountCreatedScreen()),
+
+      // Phase 6 also stands up a real (if minimal) Home so the auth loop
+      // is provably closed end-to-end — see HomePlaceholderScreen's doc
+      // comment. The full Phase 7 dashboard replaces this call site.
+      GoRoute(path: AppRoutes.home, builder: (_, __) => const HomePlaceholderScreen()),
+
+      // Everything below is still a placeholder until its feature phase
+      // builds the real screen — see AppRoutes' phase-numbered comments.
       for (final entry in _placeholderTitles.entries)
         GoRoute(
           path: entry.key,
@@ -91,14 +121,8 @@ class _GoRouterRefreshNotifier extends ChangeNotifier {
 
 /// Route path -> Arabic screen title, sourced directly from the Phase 4
 /// prototype's `data-name` attributes, for every screen not yet built.
+/// Auth routes and Home are handled explicitly above, as of Phase 6.
 const _placeholderTitles = <String, String>{
-  AppRoutes.login: 'تسجيل الدخول',
-  AppRoutes.register: 'إنشاء حساب',
-  AppRoutes.verifyCode: 'رمز التحقق',
-  AppRoutes.forgotPassword: 'نسيت كلمة المرور',
-  AppRoutes.resetPassword: 'إعادة تعيين كلمة المرور',
-  AppRoutes.accountCreated: 'تم إنشاء الحساب',
-  AppRoutes.home: 'الرئيسية',
   AppRoutes.verify: 'التحقق',
   AppRoutes.verifyResult: 'نتيجة التحقق',
   AppRoutes.verifyInProgress: 'جارٍ التحقق',
