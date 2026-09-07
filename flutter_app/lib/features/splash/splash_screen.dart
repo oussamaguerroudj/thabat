@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
                     colors: [
-                      AppColors.greenDeep.withValues(alpha: 0.55),
+                      AppColors.greenDeep.withOpacity(0.55),
                       Colors.transparent,
                     ],
                   ),
@@ -113,4 +113,3 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 }
-
