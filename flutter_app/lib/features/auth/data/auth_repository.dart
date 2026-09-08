@@ -34,7 +34,7 @@ class AuthRepository {
   Future<Result<Unit>> verifyEmail({required String email, required String code}) async {
     try {
       await _apiClient.dio.post('/auth/verify-email', data: {'email': email, 'code': code});
-      return const Result.ok(Unit.value);
+      return Result.ok(Unit.value);
     } on DioException catch (e) {
       return Result.err(mapDioExceptionToFailure(e));
     }
@@ -43,7 +43,7 @@ class AuthRepository {
   Future<Result<Unit>> resendVerification({required String email}) async {
     try {
       await _apiClient.dio.post('/auth/resend-verification', data: {'email': email});
-      return const Result.ok(Unit.value);
+      return Result.ok(Unit.value);
     } on DioException catch (e) {
       return Result.err(mapDioExceptionToFailure(e));
     }
@@ -64,7 +64,7 @@ class AuthRepository {
   Future<Result<Unit>> forgotPassword({required String email}) async {
     try {
       await _apiClient.dio.post('/auth/forgot-password', data: {'email': email});
-      return const Result.ok(Unit.value);
+      return Result.ok(Unit.value);
     } on DioException catch (e) {
       return Result.err(mapDioExceptionToFailure(e));
     }
@@ -81,7 +81,7 @@ class AuthRepository {
         'code': code,
         'new_password': newPassword,
       });
-      return const Result.ok(Unit.value);
+      return Result.ok(Unit.value);
     } on DioException catch (e) {
       return Result.err(mapDioExceptionToFailure(e));
     }
@@ -90,7 +90,7 @@ class AuthRepository {
   Future<Result<Unit>> logout({required String refreshToken}) async {
     try {
       await _apiClient.dio.post('/auth/logout', data: {'refresh_token': refreshToken});
-      return const Result.ok(Unit.value);
+      return Result.ok(Unit.value);
     } on DioException catch (e) {
       return Result.err(mapDioExceptionToFailure(e));
     }
