@@ -12,7 +12,7 @@ import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/presentation/reset_password_screen.dart';
 import '../../features/auth/presentation/verify_code_screen.dart';
-import '../../features/home/presentation/home_placeholder_screen.dart';
+import '../../features/home/presentation/home_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/splash/splash_screen.dart';
 
@@ -65,10 +65,9 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(path: AppRoutes.accountCreated, builder: (_, __) => const AccountCreatedScreen()),
 
-      // Phase 6 also stands up a real (if minimal) Home so the auth loop
-      // is provably closed end-to-end — see HomePlaceholderScreen's doc
-      // comment. The full Phase 7 dashboard replaces this call site.
-      GoRoute(path: AppRoutes.home, builder: (_, __) => const HomePlaceholderScreen()),
+      // Phase 7 — the real Home dashboard from the Phase 4 design,
+      // replacing Phase 6's minimal placeholder.
+      GoRoute(path: AppRoutes.home, builder: (_, __) => const HomeScreen()),
 
       // Everything below is still a placeholder until its feature phase
       // builds the real screen — see AppRoutes' phase-numbered comments.

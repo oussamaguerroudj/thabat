@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/connectivity/connectivity_provider.dart';
 import 'core/providers/core_providers.dart';
-import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/widgets/app_state_views.dart';
 
