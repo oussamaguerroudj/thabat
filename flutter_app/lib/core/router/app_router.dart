@@ -15,6 +15,9 @@ import '../../features/auth/presentation/verify_code_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/splash/splash_screen.dart';
+import '../../features/verification/presentation/verification_in_progress_screen.dart';
+import '../../features/verification/presentation/verification_result_screen.dart';
+import '../../features/verification/presentation/verification_screen.dart';
 
 /// Routes that don't require a session. Everything else is treated as
 /// protected: an unauthenticated user hitting a protected route is
@@ -69,6 +72,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       // replacing Phase 6's minimal placeholder.
       GoRoute(path: AppRoutes.home, builder: (_, __) => const HomeScreen()),
 
+      // Phase 8 — Religious Content Verification, wired to the real
+      // backend verification engine.
+      GoRoute(path: AppRoutes.verify, builder: (_, __) => const VerificationScreen()),
+      GoRoute(
+        path: AppRoutes.verifyInProgress,
+        builder: (_, state) => VerificationInProgressScreen(content: state.extra as String? ?? ''),
+      ),
+      GoRoute(path: AppRoutes.verifyResult, builder: (_, __) => const VerificationResultScreen()),
+
       // Everything below is still a placeholder until its feature phase
       // builds the real screen — see AppRoutes' phase-numbered comments.
       for (final entry in _placeholderTitles.entries)
@@ -122,9 +134,6 @@ class _GoRouterRefreshNotifier extends ChangeNotifier {
 /// prototype's `data-name` attributes, for every screen not yet built.
 /// Auth routes and Home are handled explicitly above, as of Phase 6.
 const _placeholderTitles = <String, String>{
-  AppRoutes.verify: 'التحقق',
-  AppRoutes.verifyResult: 'نتيجة التحقق',
-  AppRoutes.verifyInProgress: 'جارٍ التحقق',
   AppRoutes.verifyMethodology: 'منهجية التحقق',
   AppRoutes.askThabat: 'اسأل ثبات',
   AppRoutes.quran: 'القرآن الكريم',
